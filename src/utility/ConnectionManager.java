@@ -1,4 +1,39 @@
 package utility;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class ConnectionManager
+{
+	public static Connection getConnection() throws ClassNotFoundException, SQLException, IOException 
+	{
+		Properties p = loadPropertiesFile(); 
+		final String driver=p.getProperty("driver");
+		final String url=p.getProperty("url"); 
+		final String username=p.getProperty("username");
+		final String password=p.getProperty("password");
+		System.out.println(username);
+		System.out.println(password);
+		Class.forName(driver);
+		Connection con=null;
+		con=DriverManager.getConnection(url,username,password);
+		return con;
+		
+	}
+
+public static Properties loadPropertiesFile() throws IOException 
+{
+	Properties prop = new Properties();
+	InputStream in = ConnectionManager.class.getClassLoader().getResourceAsStream("jdbc.properties");
+	prop.load(in);
+	in.close();
+	return prop;
+}
 
 
+
+}
